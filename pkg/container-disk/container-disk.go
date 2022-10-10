@@ -154,6 +154,8 @@ func GetDiskTargetPartFromLauncherView(volumeIndex int) (string, error) {
 	return "", fmt.Errorf("no supported file disk found for volume with index %d", volumeIndex)
 }
 
+// zhou:
+
 // NewSocketPathGetter get the socket pat of a containerDisk. For testing a baseDir
 // can be provided which can for instance point to /tmp.
 func NewSocketPathGetter(baseDir string) SocketPathGetter {
@@ -277,6 +279,8 @@ func generateContainersHelper(vmi *v1.VirtualMachineInstance, config *virtconfig
 	return containers
 }
 
+// zhou: README,
+
 func generateContainerFromVolume(vmi *v1.VirtualMachineInstance, config *virtconfig.ClusterConfig, imageIDs map[string]string, podVolumeName, binVolumeName string, isInit, isKernelBoot bool, volume *v1.Volume, volumeIdx int) *kubev1.Container {
 	if volume.ContainerDisk == nil {
 		return nil
@@ -367,6 +371,8 @@ func generateContainerFromVolume(vmi *v1.VirtualMachineInstance, config *virtcon
 
 	return container
 }
+
+// zhou: README, COW ContainerDisk
 
 func CreateEphemeralImages(
 	vmi *v1.VirtualMachineInstance,

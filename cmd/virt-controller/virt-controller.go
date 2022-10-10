@@ -23,6 +23,8 @@ import (
 	"kubevirt.io/kubevirt/pkg/virt-controller/watch"
 )
 
+// zhou: virt-controller
+
 func main() {
 	watch.Execute()
 }

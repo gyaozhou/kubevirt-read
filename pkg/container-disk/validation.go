@@ -26,6 +26,8 @@ func VerifyQCOW2(diskInfo *DiskInfo) error {
 	return nil
 }
 
+// zhou: verify the ContainerDisk content
+
 func VerifyImage(diskInfo *DiskInfo) error {
 	switch diskInfo.Format {
 	case "qcow2":

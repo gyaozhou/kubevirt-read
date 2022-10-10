@@ -247,6 +247,8 @@ func (m *mounter) setAddMountTargetRecordHelper(vmi *v1.VirtualMachineInstance, 
 	return nil
 }
 
+// zhou: README,
+
 // Mount takes a vmi and mounts all container disks of the VMI, so that they are visible for the qemu process.
 // Additionally qcow2 images are validated if "verify" is true. The validation happens with rlimits set, to avoid DOS.
 func (m *mounter) MountAndVerify(vmi *v1.VirtualMachineInstance) (map[string]*containerdisk.DiskInfo, error) {
@@ -315,6 +317,8 @@ func (m *mounter) MountAndVerify(vmi *v1.VirtualMachineInstance) (map[string]*co
 				if err != nil {
 					return nil, fmt.Errorf("failed to find a sourceFile in containerDisk %v: %v", volume.Name, err)
 				}
+
+				// zhou: {"component":"virt-handler","kind":"","level":"info","msg":"Bind mounting container disk at root: /proc/1/root, relative: /var/lib/containers/storage/overlay/8cf4fba66b79db21e4ba1093cbd0005be097d69f265bcea147bb9d0a3ca9b0fa/merged/disk/disk.img to root: /var/lib/kubelet/pods/b79742e2-9c9f-42b5-9c30-d28b30c38418/volumes/kubernetes.io~empty-dir/container-disks, relative: /disk_1.img","name":"centos-stream9-late-barnacle","namespace":"default","pos":"mount.go:319","timestamp":"2024-05-11T08:31:23.531704Z","uid":"c6058256-fcb9-413d-8f50-111b0c4ac0b1"}
 
 				log.DefaultLogger().Object(vmi).Infof("Bind mounting container disk at %s to %s", sourceFile, targetFile)
 				out, err := virt_chroot.MountChroot(sourceFile, targetFile, true).CombinedOutput()

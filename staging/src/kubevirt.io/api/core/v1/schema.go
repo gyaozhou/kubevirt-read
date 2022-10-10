@@ -175,6 +175,8 @@ type CloudInitConfigDriveSource struct {
 	NetworkData string `json:"networkData,omitempty"`
 }
 
+// zhou: README,
+
 type DomainSpec struct {
 	// Resources describes the Compute Resources required by this vmi.
 	Resources ResourceRequirements `json:"resources,omitempty"`
@@ -196,6 +198,9 @@ type DomainSpec struct {
 	// Features like acpi, apic, hyperv, smm.
 	// +optional
 	Features *Features `json:"features,omitempty"`
+
+	// zhou:
+
 	// Devices allows adding disks, network interfaces, and others
 	Devices Devices `json:"devices"`
 	// Controls whether or not disks will share IOThreads.
@@ -438,6 +443,8 @@ type ACPI struct {
 	SlicNameRef string `json:"slicNameRef,omitempty"`
 }
 
+// zhou: VM devices
+
 type Devices struct {
 	// Fall back to legacy virtio 0.9 support if virtio bus is selected on devices.
 	// This is helpful for old machines like CentOS6 or RHEL6 which
@@ -445,18 +452,29 @@ type Devices struct {
 	UseVirtioTransitional *bool `json:"useVirtioTransitional,omitempty"`
 	// DisableHotplug disabled the ability to hotplug disks.
 	DisableHotplug bool `json:"disableHotplug,omitempty"`
+
+	// zhou: block devices
+
 	// Disks describes disks, cdroms and luns which are connected to the vmi.
 	// +kubebuilder:validation:MaxItems:=256
 	Disks []Disk `json:"disks,omitempty"`
+
 	// Watchdog describes a watchdog device which can be added to the vmi.
 	Watchdog *Watchdog `json:"watchdog,omitempty"`
+
+	// zhou: Network interface
+
 	// Interfaces describe network interfaces which are added to the vmi.
 	// +kubebuilder:validation:MaxItems:=256
 	Interfaces []Interface `json:"interfaces,omitempty"`
 	// Inputs describe input devices
 	Inputs []Input `json:"inputs,omitempty"`
+
+	// zhou: Pod network
+
 	// Whether to attach a pod network interface. Defaults to true.
 	AutoattachPodInterface *bool `json:"autoattachPodInterface,omitempty"`
+
 	// Whether to attach the default graphics device or not.
 	// VNC will not be available if set to false. Defaults to true.
 	AutoattachGraphicsDevice *bool `json:"autoattachGraphicsDevice,omitempty"`
@@ -497,10 +515,14 @@ type Devices struct {
 	// DownwardMetrics creates a virtio serials for exposing the downward metrics to the vmi.
 	// +optional
 	DownwardMetrics *DownwardMetrics `json:"downwardMetrics,omitempty"`
+
+	// zhou: expose filesystem to VMI directly
+
 	// Filesystems describes filesystem which is connected to the vmi.
 	// +optional
 	// +listType=atomic
 	Filesystems []Filesystem `json:"filesystems,omitempty"`
+
 	//Whether to attach a host device to the vmi.
 	// +optional
 	// +listType=atomic
@@ -618,12 +640,20 @@ type HostDevice struct {
 	Tag string `json:"tag,omitempty"`
 }
 
+// zhou:
+
 type Disk struct {
+
+	// zhou: refer to the name of volume
+
 	// Name is the device name
 	Name string `json:"name"`
 	// DiskDevice specifies as which device the disk should be added to the guest.
 	// Defaults to Disk.
 	DiskDevice `json:",inline"`
+
+	// zhou:
+
 	// BootOrder is an integer value > 0, used to determine ordering of boot devices.
 	// Lower values take precedence.
 	// Each disk or interface that has a boot order must have a unique value.
@@ -768,6 +798,8 @@ type CDRomTarget struct {
 	Tray TrayState `json:"tray,omitempty"`
 }
 
+// zhou:
+
 // Volume represents a named volume in a vmi.
 type Volume struct {
 	// Volume's name.
@@ -778,6 +810,8 @@ type Volume struct {
 	// Defaults to Disk, if no type is specified.
 	VolumeSource `json:",inline"`
 }
+
+// zhou: README, used to describe the volume source.
 
 // Represents the source of a volume to mount.
 // Only one of its members may be specified.
@@ -841,6 +875,8 @@ type VolumeSource struct {
 	MemoryDump *MemoryDumpVolumeSource `json:"memoryDump,omitempty"`
 }
 
+// zhou: Hotplug volume
+
 // HotplugVolumeSource Represents the source of a volume to mount which are capable
 // of being hotplugged on a live running VMI.
 // Only one of its members may be specified.
@@ -855,6 +891,8 @@ type HotplugVolumeSource struct {
 	// +optional
 	DataVolume *DataVolumeSource `json:"dataVolume,omitempty"`
 }
+
+// zhou:
 
 type DataVolumeSource struct {
 	// Name of both the DataVolume and the PVC in the same namespace.
@@ -895,6 +933,8 @@ type EmptyDiskSource struct {
 	// Capacity of the sparse disk.
 	Capacity resource.Quantity `json:"capacity"`
 }
+
+// zhou: container image as disk
 
 // Represents a docker image with an embedded disk.
 type ContainerDiskSource struct {

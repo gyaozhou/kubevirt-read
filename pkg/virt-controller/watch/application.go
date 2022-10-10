@@ -266,6 +266,8 @@ func init() {
 	utilruntime.Must(clonev1alpha1.AddToScheme(scheme.Scheme))
 }
 
+// zhou: just work as controller, but not using controller-runtime
+
 func Execute() {
 	var err error
 	var app = VirtControllerApp{}
@@ -344,6 +346,8 @@ func Execute() {
 
 	restful.Add(webService)
 
+	// zhou: setup up informer for each kinds.
+
 	app.vmiInformer = app.informerFactory.VMI()
 	app.kvPodInformer = app.informerFactory.KubeVirtPod()
 	app.nodeInformer = app.informerFactory.KubeVirtNode()
@@ -397,6 +401,8 @@ func Execute() {
 		log.Log.Infof("CDI not detected, DataVolume integration disabled")
 	}
 
+	// zhou: OCP related informer
+
 	onOpenShift, err := clusterutil.IsOnOpenShift(app.clientSet)
 	if err != nil {
 		golog.Fatalf("Error determining cluster type: %v", err)
@@ -433,10 +439,12 @@ func Execute() {
 		golog.Fatal(err)
 	}
 
-	app.initCommon()
+	// zhou: start up related controllers
+
+	app.initCommon() // zhou: VirtualMachineInstance
 	app.initReplicaSet()
 	app.initPool()
-	app.initVirtualMachines()
+	app.initVirtualMachines() // zhou: VirtualMachine
 	app.initDisruptionBudgetController()
 	app.initEvacuationController()
 	app.initSnapshotController()
@@ -585,6 +593,8 @@ func (vca *VirtControllerApp) newRecorder(namespace string, componentName string
 	return eventBroadcaster.NewRecorder(scheme.Scheme, k8sv1.EventSource{Component: componentName})
 }
 
+// zhou: VMI controller
+
 func (vca *VirtControllerApp) initCommon() {
 	var err error
 
@@ -617,6 +627,8 @@ func (vca *VirtControllerApp) initCommon() {
 	)
 
 	topologyHinter := topology.NewTopologyHinter(vca.nodeInformer.GetStore(), vca.vmiInformer.GetStore(), vca.clusterConfig)
+
+	// zhou:
 
 	vca.vmiController, err = NewVMIController(vca.templateService,
 		vca.vmiInformer,
@@ -692,6 +704,8 @@ func (vca *VirtControllerApp) initPool() {
 	}
 }
 
+// zhou: README,
+
 func (vca *VirtControllerApp) initVirtualMachines() {
 	var err error
 	recorder := vca.newRecorder(k8sv1.NamespaceAll, "virtualmachine-controller")
@@ -704,6 +718,8 @@ func (vca *VirtControllerApp) initVirtualMachines() {
 		ControllerRevisionStore:  vca.controllerRevisionInformer.GetStore(),
 		Clientset:                vca.clientSet,
 	}
+
+	// zhou:
 
 	vca.vmController, err = NewVMController(
 		vca.vmiInformer,

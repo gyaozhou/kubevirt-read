@@ -145,6 +145,8 @@ var optFns = map[string]optionFn{
 	VolumeImportFlag:         withImportedVolume,
 }
 
+// zhou: README,
+
 // Unless the boot order is specified by the user volumes have the following fixed boot order:
 // Containerdisk > DataSource > Clone PVC > PVC
 // Flags dependent on the boot order (e.g. InferInstancetype or InferPreference) need to run last.

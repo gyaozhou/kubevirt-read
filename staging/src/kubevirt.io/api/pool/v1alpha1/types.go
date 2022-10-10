@@ -30,6 +30,8 @@ const (
 	VirtualMachinePoolKind = "VirtualMachinePool"
 )
 
+// zhou:
+
 // VirtualMachinePool resource contains a VirtualMachine configuration
 // that can be used to replicate multiple VirtualMachine resources.
 //

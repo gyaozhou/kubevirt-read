@@ -26,6 +26,8 @@ import (
 	virt_api "kubevirt.io/kubevirt/pkg/virt-api"
 )
 
+// zhou: virt-api implemented as kube-aggregator.
+
 func main() {
 	klog.InitializeLogging("virt-api")
 

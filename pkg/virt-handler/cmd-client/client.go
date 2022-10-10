@@ -81,6 +81,8 @@ type MigrationOptions struct {
 	ParallelMigrationThreads *uint
 }
 
+// zhou: README,
+
 type LauncherClient interface {
 	SyncVirtualMachine(vmi *v1.VirtualMachineInstance, options *cmdv1.VirtualMachineOptions) error
 	PauseVirtualMachine(vmi *v1.VirtualMachineInstance) error
@@ -429,6 +431,8 @@ func IsDisconnected(err error) bool {
 
 	return false
 }
+
+// zhou: operations
 
 func (c *VirtLauncherClient) SyncVirtualMachine(vmi *v1.VirtualMachineInstance, options *cmdv1.VirtualMachineOptions) error {
 	return c.genericSendVMICmd("SyncVMI", c.v1client.SyncVirtualMachine, vmi, options)

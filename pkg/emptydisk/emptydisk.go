@@ -22,6 +22,10 @@ type emptyDiskCreator struct {
 	discCreateFunc   func(filePath string, size string) error
 }
 
+// zhou: create qcow2 image "/var/run/libvirt/empty-disks/<volume name>" in Pod,
+//       "/var/lib/kubevirt/empty-disks/<volume name>" on host.
+//       Doesn't leverage Pod emptyDir.
+
 func (c *emptyDiskCreator) CreateTemporaryDisks(vmi *v1.VirtualMachineInstance) error {
 	logger := log.Log.Object(vmi)
 
@@ -68,6 +72,8 @@ func createQCOW(file string, size string) error {
 	// #nosec No risk for attacket injection. Parameters are predefined strings
 	return exec.Command("qemu-img", "create", "-f", "qcow2", file, size).Run()
 }
+
+// zhou:
 
 func NewEmptyDiskCreator() *emptyDiskCreator {
 	return &emptyDiskCreator{

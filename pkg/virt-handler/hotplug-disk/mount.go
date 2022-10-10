@@ -158,6 +158,8 @@ type vmiMountTargetRecord struct {
 	UsesSafePaths      bool                  `json:"usesSafePaths"`
 }
 
+// zhou: hotplug
+
 // NewVolumeMounter creates a new VolumeMounter
 func NewVolumeMounter(mountStateDir string, kubeletPodsDir string) VolumeMounter {
 	return &volumeMounter{
@@ -299,6 +301,8 @@ func (m *volumeMounter) writePathToMountRecord(path string, vmi *v1.VirtualMachi
 	return nil
 }
 
+// zhou: README,
+
 func (m *volumeMounter) mountHotplugVolume(
 	vmi *v1.VirtualMachineInstance,
 	volumeName string,
@@ -312,6 +316,7 @@ func (m *volumeMounter) mountHotplugVolume(
 	if sourceUID != types.UID("") {
 		if m.isBlockVolume(&vmi.Status, volumeName) {
 			logger.V(4).Infof("Mounting block volume: %s", volumeName)
+
 			if err := m.mountBlockHotplugVolume(vmi, volumeName, sourceUID, record, cgroupManager); err != nil {
 				if !errors.Is(err, os.ErrNotExist) {
 					return fmt.Errorf("failed to mount block hotplug volume %s: %v", volumeName, err)
@@ -354,6 +359,9 @@ func (m *volumeMounter) mountFromPod(vmi *v1.VirtualMachineInstance, sourceUID t
 		if sourceUID == types.UID("") {
 			sourceUID = volumeStatus.HotplugVolume.AttachPodUID
 		}
+
+		// zhou:
+
 		if err := m.mountHotplugVolume(vmi, volumeStatus.Name, sourceUID, record, mountDirectory, cgroupManager); err != nil {
 			return err
 		}
@@ -381,6 +389,8 @@ func (m *volumeMounter) isBlockVolume(vmiStatus *v1.VirtualMachineInstanceStatus
 	}
 	return false
 }
+
+// zhou: README,
 
 func (m *volumeMounter) mountBlockHotplugVolume(
 	vmi *v1.VirtualMachineInstance,

@@ -31,6 +31,8 @@ const (
 	DefaultDurationTTL = 2 * time.Hour
 )
 
+// zhou:
+
 // VirtualMachineExport defines the operation of exporting a VM source
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

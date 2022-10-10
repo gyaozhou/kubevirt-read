@@ -724,6 +724,8 @@ func GetHotplugBlockDeviceVolumePath(volumeName string) string {
 	return filepath.Join(string(filepath.Separator), "var", "run", "kubevirt", "hotplug-disks", volumeName)
 }
 
+// zhou: README
+
 func Convert_v1_PersistentVolumeClaim_To_api_Disk(name string, disk *api.Disk, c *ConverterContext) error {
 	if c.IsBlockPVC[name] {
 		return Convert_v1_BlockVolumeSource_To_api_Disk(name, disk, c.VolumesDiscardIgnore)
@@ -777,6 +779,8 @@ func Convert_v1_Hotplug_FilesystemVolumeSource_To_api_Disk(volumeName string, di
 	disk.Source.File = GetHotplugFilesystemVolumePath(volumeName)
 	return nil
 }
+
+// zhou: README,
 
 func Convert_v1_BlockVolumeSource_To_api_Disk(volumeName string, disk *api.Disk, volumesDiscardIgnore []string) error {
 	disk.Type = "block"

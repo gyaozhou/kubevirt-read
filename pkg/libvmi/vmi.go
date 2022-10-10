@@ -33,6 +33,8 @@ import (
 // Option represents an action that enables an option.
 type Option func(vmi *v1.VirtualMachineInstance)
 
+// zhou: used to generate expected VirtualMachineInstance.
+
 // New instantiates a new VMI configuration,
 // building its properties based on the specified With* options.
 func New(opts ...Option) *v1.VirtualMachineInstance {

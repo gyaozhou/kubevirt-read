@@ -26,6 +26,8 @@ import (
 	v1 "kubevirt.io/api/core/v1"
 )
 
+// zhou:
+
 // VirtualMachineInstancetype resource contains quantitative and resource related VirtualMachine configuration
 // that can be used by multiple VirtualMachine resources.
 //
@@ -47,6 +49,8 @@ type VirtualMachineInstancetypeList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []VirtualMachineInstancetype `json:"items"`
 }
+
+// zhou:
 
 // VirtualMachineClusterInstancetype is a cluster scoped version of VirtualMachineInstancetype resource.
 //
@@ -203,6 +207,8 @@ type VirtualMachinePreferenceList struct {
 	// +listType=set
 	Items []VirtualMachinePreference `json:"items"`
 }
+
+// zhou:
 
 // VirtualMachineClusterPreference is a cluster scoped version of the VirtualMachinePreference resource.
 //

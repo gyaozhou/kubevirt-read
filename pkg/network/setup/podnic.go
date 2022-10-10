@@ -88,6 +88,8 @@ func newPodNIC(vmi *v1.VirtualMachineInstance, network *v1.Network, iface *v1.In
 	}, nil
 }
 
+// zhou: README,
+
 func (l *podNIC) PlugPhase2(domain *api.Domain) error {
 	precond.MustNotBeNil(domain)
 

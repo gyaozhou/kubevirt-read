@@ -155,6 +155,8 @@ func startDomainEventMonitoring(
 	}
 }
 
+// zhou: set folds privilig
+
 func initializeDirs(ephemeralDiskDir string,
 	containerDiskDir string,
 	hotplugDiskDir string,
@@ -333,12 +335,18 @@ func waitForFinalNotify(deleteNotificationSent chan watch.Event,
 	}
 }
 
+// zhou: virt-launcher binary, will be executed by virt-launcher-monitor Pod.
+
 func main() {
 	qemuTimeout := pflag.Duration("qemu-timeout", defaultStartTimeout, "Amount of time to wait for qemu")
+
+	// zhou: related folders in host
+
 	virtShareDir := pflag.String("kubevirt-share-dir", "/var/run/kubevirt", "Shared directory between virt-handler and virt-launcher")
 	ephemeralDiskDir := pflag.String("ephemeral-disk-dir", "/var/run/kubevirt-ephemeral-disks", "Base directory for ephemeral disk data")
 	containerDiskDir := pflag.String("container-disk-dir", "/var/run/kubevirt/container-disks", "Base directory for container disk data")
 	hotplugDiskDir := pflag.String("hotplug-disk-dir", v1.HotplugDiskDir, "Base directory for hotplug disk data")
+
 	name := pflag.String("name", "", "Name of the VirtualMachineInstance")
 	uid := pflag.String("uid", "", "UID of the VirtualMachineInstance")
 	namespace := pflag.String("namespace", "", "Namespace of the VirtualMachineInstance")
@@ -395,6 +403,9 @@ func main() {
 	}
 
 	vmi := v1.NewVMIReferenceWithUUID(*namespace, *name, types.UID(*uid))
+
+	// zhou: "/var/run/kubevirt-ephemeral-disks/disk-data" in Pod,
+	//       which is a EmptyDir on host.
 
 	ephemeralDiskCreator := ephemeraldisk.NewEphemeralDiskCreator(filepath.Join(*ephemeralDiskDir, "disk-data"))
 	if err := ephemeralDiskCreator.Init(); err != nil {

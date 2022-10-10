@@ -44,4 +44,7 @@ hack/builder/manifests/
 *~
 .bazeldnf/
 user.bazelrc
+cscope.files
+cscope.out
+TAGS
 .vscode/

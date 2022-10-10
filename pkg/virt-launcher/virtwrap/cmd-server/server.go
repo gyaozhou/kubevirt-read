@@ -191,12 +191,16 @@ func (l *Launcher) SyncVirtualMachineCPUs(_ context.Context, request *cmdv1.VMIR
 	return response, nil
 }
 
+// zhou: README, RPC service, handle the RPC request from ???
+
 func (l *Launcher) SyncVirtualMachine(_ context.Context, request *cmdv1.VMIRequest) (*cmdv1.Response, error) {
 
 	vmi, response := getVMIFromRequest(request.Vmi)
 	if !response.Success {
 		return response, nil
 	}
+
+	// zhou:
 
 	if _, err := l.domainManager.SyncVMI(vmi, l.allowEmulation, request.Options); err != nil {
 		log.Log.Object(vmi).Reason(err).Errorf("Failed to sync vmi")

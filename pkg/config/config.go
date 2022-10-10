@@ -192,6 +192,8 @@ type volumeInfo interface {
 	getLabel(*v1.Volume) string
 }
 
+// zhou:
+
 func createIsoDisksForConfigVolumes(vmi *v1.VirtualMachineInstance, emptyIso bool, info volumeInfo) error {
 	volumes := make(map[string]v1.Volume)
 	for _, volume := range vmi.Spec.Volumes {

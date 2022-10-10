@@ -191,6 +191,8 @@ var getCgroupManager = func(vmi *v1.VirtualMachineInstance) (cgroup.Manager, err
 	return cgroup.NewManagerFromVM(vmi)
 }
 
+// zhou: virt-handler DaemonSet
+
 func NewController(
 	recorder record.EventRecorder,
 	clientset kubecli.KubevirtClient,
@@ -2788,11 +2790,15 @@ func (d *VirtualMachineController) vmUpdateHelperMigrationTarget(origVMI *v1.Vir
 		return err
 	}
 
+	// zhou: handle container disks
+
 	// Mount container disks
 	disksInfo, err := d.containerDiskMounter.MountAndVerify(vmi)
 	if err != nil {
 		return err
 	}
+
+	// zhou: handle hotplug disk
 
 	// Mount hotplug disks
 	if attachmentPodUID := vmi.Status.MigrationState.TargetAttachmentPodUID; attachmentPodUID != types.UID("") {
@@ -2975,6 +2981,8 @@ func (d *VirtualMachineController) configureHousekeepingCgroup(vmi *v1.VirtualMa
 	return nil
 }
 
+// zhou: README,
+
 func (d *VirtualMachineController) vmUpdateHelperDefault(origVMI *v1.VirtualMachineInstance, domainExists bool) error {
 	client, err := d.getLauncherClient(origVMI)
 	if err != nil {
@@ -3001,6 +3009,9 @@ func (d *VirtualMachineController) vmUpdateHelperDefault(origVMI *v1.VirtualMach
 	}
 	var errorTolerantFeaturesError []error
 	disksInfo := map[string]*containerdisk.DiskInfo{}
+
+	// zhou: VM is not running
+
 	if !vmi.IsRunning() && !vmi.IsFinal() {
 		// give containerDisks some time to become ready before throwing errors on retries
 		info := d.getLauncherClientInfo(vmi)
@@ -3016,6 +3027,8 @@ func (d *VirtualMachineController) vmUpdateHelperDefault(origVMI *v1.VirtualMach
 		if err != nil {
 			return err
 		}
+
+		// zhou:
 
 		// Try to mount hotplug volume if there is any during startup.
 		if err := d.hotplugVolumeMounter.Mount(vmi, cgroupManager); err != nil {
@@ -3099,6 +3112,9 @@ func (d *VirtualMachineController) vmUpdateHelperDefault(origVMI *v1.VirtualMach
 			}
 		}
 	} else if vmi.IsRunning() {
+
+		// zhou: VM is  running
+
 		if err := d.hotplugSriovInterfaces(vmi); err != nil {
 			log.Log.Object(vmi).Error(err.Error())
 		}
@@ -3146,6 +3162,8 @@ func (d *VirtualMachineController) vmUpdateHelperDefault(origVMI *v1.VirtualMach
 
 	options := virtualMachineOptions(smbios, period, preallocatedVolumes, d.capabilities, disksInfo, d.clusterConfig)
 	options.InterfaceDomainAttachment = domainspec.DomainAttachmentByInterfaceName(vmi.Spec.Domain.Devices.Interfaces, d.clusterConfig.GetNetworkBindings())
+
+	// zhou:
 
 	err = client.SyncVirtualMachine(vmi, options)
 	if err != nil {

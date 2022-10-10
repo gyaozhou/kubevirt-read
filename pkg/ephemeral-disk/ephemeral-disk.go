@@ -53,6 +53,9 @@ type ephemeralDiskCreator struct {
 	discCreateFunc  func(backingFile string, backingFormat string, imagePath string) ([]byte, error)
 }
 
+// zhou: README, Ephemeral disk used for cloud-init,
+//       "/var/run/kubevirt-ephemeral-disks/disk-data" by default.
+
 func NewEphemeralDiskCreator(mountBaseDir string) *ephemeralDiskCreator {
 	return &ephemeralDiskCreator{
 		mountBaseDir:    mountBaseDir,

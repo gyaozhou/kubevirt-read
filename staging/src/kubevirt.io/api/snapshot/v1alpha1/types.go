@@ -31,6 +31,8 @@ import (
 
 const DefaultFailureDeadline = 5 * time.Minute
 
+// zhou: take a snapshot of VM
+
 // VirtualMachineSnapshot defines the operation of snapshotting a VM
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -190,6 +192,8 @@ type VirtualMachineSnapshotList struct {
 	Items []VirtualMachineSnapshot `json:"items"`
 }
 
+// zhou:
+
 // VirtualMachineSnapshotContent contains the snapshot data
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -292,6 +296,8 @@ type VolumeSnapshotStatus struct {
 	// +optional
 	Error *Error `json:"error,omitempty"`
 }
+
+// zhou: used to restore a VM from a snapshot
 
 // VirtualMachineRestore defines the operation of restoring a VM
 // +genclient

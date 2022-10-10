@@ -666,6 +666,8 @@ func (app *virtHandlerApp) setupTLS(factory controller.KubeInformerFactory) erro
 	return nil
 }
 
+// zhou: virt-handler
+
 func main() {
 	app := &virtHandlerApp{}
 	service.Setup(app)

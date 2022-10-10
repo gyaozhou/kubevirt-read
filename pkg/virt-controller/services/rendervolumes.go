@@ -524,6 +524,8 @@ func serviceAccount(volumes ...v1.Volume) string {
 	return ""
 }
 
+// zhou: used to add PVC to virt-launcher Pod.
+
 func (vr *VolumeRenderer) addPVCToLaunchManifest(pvcStore cache.Store, volume v1.Volume, claimName string) error {
 	logger := log.DefaultLogger()
 	_, exists, isBlock, err := types.IsPVCBlockFromStore(pvcStore, vr.namespace, claimName)

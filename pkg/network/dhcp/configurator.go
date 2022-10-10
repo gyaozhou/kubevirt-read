@@ -84,6 +84,8 @@ func NewMasqueradeConfigurator(advertisingIfaceName string, handler netdriver.Ne
 	}
 }
 
+// zhou: README,
+
 func (d *configurator) EnsureDHCPServerStarted(podInterfaceName string, dhcpConfig cache.DHCPConfig, dhcpOptions *v1.DHCPOptions) error {
 	if dhcpConfig.IPAMDisabled {
 		return nil

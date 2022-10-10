@@ -38,6 +38,8 @@ import (
 
 const DefaultGracePeriodSeconds int64 = 30
 
+// zhou: README,
+
 // VirtualMachineInstance is *the* VirtualMachineInstance Definition. It represents a virtual machine in the runtime environment of kubernetes.
 //
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -76,6 +78,8 @@ const (
 	StartStrategyPaused StartStrategy = "Paused"
 )
 
+// zhou: core data, all kinds of VM hardware/preference/volume/nics will be consolidated here.
+
 // VirtualMachineInstanceSpec is a description of a VirtualMachineInstance.
 type VirtualMachineInstanceSpec struct {
 
@@ -84,6 +88,8 @@ type VirtualMachineInstanceSpec struct {
 	// default.
 	// +optional
 	PriorityClassName string `json:"priorityClassName,omitempty"`
+
+	// zhou:
 
 	// Specification of the desired behavior of the VirtualMachineInstance on the host.
 	Domain DomainSpec `json:"domain"`
@@ -123,6 +129,9 @@ type VirtualMachineInstanceSpec struct {
 	StartStrategy *StartStrategy `json:"startStrategy,omitempty"`
 	// Grace period observed after signalling a VirtualMachineInstance to stop after which the VirtualMachineInstance is force terminated.
 	TerminationGracePeriodSeconds *int64 `json:"terminationGracePeriodSeconds,omitempty"`
+
+	// zhou:
+
 	// List of volumes that can be mounted by disks belonging to the vmi.
 	// +kubebuilder:validation:MaxItems:=256
 	Volumes []Volume `json:"volumes,omitempty"`
@@ -296,6 +305,8 @@ type VirtualMachineInstanceStatus struct {
 	Memory *MemoryStatus `json:"memory,omitempty"`
 }
 
+// zhou: README,
+
 // PersistentVolumeClaimInfo contains the relavant information virt-handler needs cached about a PVC
 type PersistentVolumeClaimInfo struct {
 	// AccessModes contains the desired access modes the volume should have.
@@ -320,6 +331,8 @@ type PersistentVolumeClaimInfo struct {
 	// Preallocated indicates if the PVC's storage is preallocated or not
 	// +optional
 	Preallocated bool `json:"preallocated,omitempty"`
+
+	// zhou:
 
 	// Percentage of filesystem's size to be reserved when resizing the PVC
 	// +optional
@@ -1283,6 +1296,8 @@ type DataVolumeTemplateSpec struct {
 	Status *DataVolumeTemplateDummyStatus `json:"status,omitempty"`
 }
 
+// zhou:
+
 type VirtualMachineInstanceTemplateSpec struct {
 	// +kubebuilder:pruning:PreserveUnknownFields
 	// +nullable
@@ -1409,6 +1424,8 @@ func NewVirtualMachinePreset(name string, selector metav1.LabelSelector) *Virtua
 	}
 }
 
+// zhou: used to create a VM's description.
+
 // VirtualMachine handles the VirtualMachines that are not running
 // or are in a stopped state
 // The VirtualMachine contains the template to create the
@@ -1456,6 +1473,8 @@ type VirtualMachineList struct {
 	Items           []VirtualMachine `json:"items"`
 }
 
+// zhou: strategy to trigger VMI launching.
+
 // VirtualMachineRunStrategy is a label for the requested VirtualMachineInstance Running State at the current time.
 type VirtualMachineRunStrategy string
 
@@ -1483,6 +1502,8 @@ const (
 	UpdateVolumesStrategyReplacement UpdateVolumesStrategy = "Replacement"
 )
 
+// zhou:
+
 // VirtualMachineSpec describes how the proper VirtualMachine
 // should look like
 type VirtualMachineSpec struct {
@@ -1490,9 +1511,13 @@ type VirtualMachineSpec struct {
 	// Mutually exclusive with RunStrategy
 	Running *bool `json:"running,omitempty" optional:"true"`
 
+	// zhou: strategy to trigger VMI launching.
+
 	// Running state indicates the requested running state of the VirtualMachineInstance
 	// mutually exclusive with Running
 	RunStrategy *VirtualMachineRunStrategy `json:"runStrategy,omitempty" optional:"true"`
+
+	// zhou: used to find Instancetype object, which defines machine hardware info.
 
 	// InstancetypeMatcher references a instancetype that is used to fill fields in Template
 	Instancetype *InstancetypeMatcher `json:"instancetype,omitempty" optional:"true"`
@@ -1500,8 +1525,12 @@ type VirtualMachineSpec struct {
 	// PreferenceMatcher references a set of preference that is used to fill fields in Template
 	Preference *PreferenceMatcher `json:"preference,omitempty" optional:"true"`
 
+	// zhou: core, VM description same as VMI template
+
 	// Template is the direct specification of VirtualMachineInstance
 	Template *VirtualMachineInstanceTemplateSpec `json:"template"`
+
+	// zhou: used to trigger DataVolume creation to import other data source.
 
 	// dataVolumeTemplates is a list of dataVolumes that the VirtualMachineInstance template can reference.
 	// DataVolumes in this list are dynamically created for the VirtualMachine and are tied to the VirtualMachine's life-cycle.
@@ -1787,6 +1816,8 @@ type Probe struct {
 	// +optional
 	FailureThreshold int32 `json:"failureThreshold,omitempty"`
 }
+
+// zhou: used to deploy kubevirt related resources.
 
 // KubeVirt represents the object deploying all KubeVirt resources
 //
@@ -2860,6 +2891,8 @@ const (
 	RejectInferFromVolumeFailure InferFromVolumeFailurePolicy = "Reject"
 	IgnoreInferFromVolumeFailure InferFromVolumeFailurePolicy = "Ignore"
 )
+
+// zhou:
 
 // InstancetypeMatcher references a instancetype that is used to fill fields in the VMI template.
 type InstancetypeMatcher struct {

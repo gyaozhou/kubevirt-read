@@ -51,6 +51,8 @@ const (
 	IPv6 IPVersion = 6
 )
 
+// zhou: README,
+
 type NetworkHandler interface {
 	LinkByName(name string) (netlink.Link, error)
 	AddrList(link netlink.Link, family int) ([]netlink.Addr, error)
@@ -159,6 +161,8 @@ func (h *NetworkUtilsHandler) ReadIPAddressesFromLink(interfaceName string) (str
 
 	return ipv4, ipv6, nil
 }
+
+// zhou: README,
 
 func (h *NetworkUtilsHandler) StartDHCP(nic *cache.DHCPConfig, bridgeInterfaceName string, dhcpOptions *v1.DHCPOptions) error {
 	log.Log.V(4).Infof("StartDHCP network Nic: %+v", nic)

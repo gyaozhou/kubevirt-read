@@ -230,6 +230,8 @@ func newContainerVolume(name, image string) v1.Volume {
 	}
 }
 
+// zhou: used to create VMI?
+
 func newPersistentVolumeClaimVolume(name, claimName string) v1.Volume {
 	return v1.Volume{
 		Name: name,

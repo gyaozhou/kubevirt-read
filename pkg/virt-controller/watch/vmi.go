@@ -140,6 +140,8 @@ const (
 
 const failedToRenderLaunchManifestErrFormat = "failed to render launch manifest: %v"
 
+// zhou:
+
 func NewVMIController(templateService services.TemplateService,
 	vmiInformer cache.SharedIndexInformer,
 	vmInformer cache.SharedIndexInformer,
@@ -2283,6 +2285,9 @@ func (c *VMIController) updateVolumeStatus(vmi *virtv1.VirtualMachineInstance, v
 					Requests:     pvc.Spec.Resources.Requests,
 					Preallocated: storagetypes.IsPreallocated(pvc.ObjectMeta.Annotations),
 				}
+
+				// zhou:
+
 				filesystemOverhead, err := c.getFilesystemOverhead(pvc)
 				if err != nil {
 					log.Log.Reason(err).Errorf("Failed to get filesystem overhead for PVC %s/%s", vmi.Namespace, pvcName)

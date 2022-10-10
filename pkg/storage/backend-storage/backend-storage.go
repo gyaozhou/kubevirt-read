@@ -175,6 +175,8 @@ func updateVolumeStatus(vmi *corev1.VirtualMachineInstance, accessMode v1.Persis
 	})
 }
 
+// zhou: README,
+
 func (bs *BackendStorage) CreateIfNeededAndUpdateVolumeStatus(vmi *corev1.VirtualMachineInstance) error {
 	if !IsBackendStorageNeededForVMI(&vmi.Spec) {
 		return nil

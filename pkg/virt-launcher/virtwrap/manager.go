@@ -690,6 +690,8 @@ func (l *LibvirtDomainManager) generateCloudInitEmptyISO(vmi *v1.VirtualMachineI
 	return fmt.Errorf("failed to find the status of volume %s", l.cloudInitDataStore.VolumeName)
 }
 
+// zhou: README,
+
 // All local environment setup that needs to occur before VirtualMachineInstance starts
 // can be done in this function. This includes things like...
 //
@@ -765,24 +767,38 @@ func (l *LibvirtDomainManager) preStartHook(vmi *v1.VirtualMachineInstance, doma
 		return domain, fmt.Errorf("preparing the pod network failed: %v", err)
 	}
 
+	// zhou: ContainerDisk, NOT Ephemeral Disk,
+
 	// Create ephemeral disk for container disks
 	err = containerdisk.CreateEphemeralImages(vmi, l.ephemeralDiskCreator, disksInfo)
 	if err != nil {
 		return domain, fmt.Errorf("preparing ephemeral container disk images failed: %v", err)
 	}
+
 	// Create images for volumes that are marked ephemeral.
 	err = l.ephemeralDiskCreator.CreateEphemeralImages(vmi, domain)
 	if err != nil {
 		return domain, fmt.Errorf("preparing ephemeral images failed: %v", err)
 	}
+
+	// zhou: create qcow2 image under "/var/run/libvirt/empty-disks/" in Pod,
+	//       which is a EmptyDir on host.
+
 	// create empty disks if they exist
 	if err := emptydisk.NewEmptyDiskCreator().CreateTemporaryDisks(vmi); err != nil {
 		return domain, fmt.Errorf("creating empty disks failed: %v", err)
 	}
+
+	// zhou: create ISO image under "/var/run/kubevirt-private/config-map" in Pod,
+
 	// create ConfigMap disks if they exists
 	if err := config.CreateConfigMapDisks(vmi, generateEmptyIsos); err != nil {
 		return domain, fmt.Errorf("creating config map disks failed: %v", err)
 	}
+
+	// zhou: create ISO image under "/var/run/kubevirt-private/secret" in Pod,
+	//       which is a EmptyDir on host.
+
 	// create Secret disks if they exists
 	if err := config.CreateSecretDisks(vmi, generateEmptyIsos); err != nil {
 		return domain, fmt.Errorf("creating secret disks failed: %v", err)
@@ -925,6 +941,9 @@ func (l *LibvirtDomainManager) generateConverterContext(vmi *v1.VirtualMachineIn
 		}
 	}
 
+	// zhou: handle PVC, setup PVC block device and DataVolume block device map.
+	//       DataVolume is also build upon PVC.
+
 	// Check if PVC volumes are block volumes
 	isBlockPVCMap := make(map[string]bool)
 	isBlockDVMap := make(map[string]bool)
@@ -1048,6 +1067,8 @@ func isFreePageReportingEnabled(clusterFreePageReportingDisabled bool, vmi *v1.V
 func isSerialConsoleLogEnabled(clusterSerialConsoleLogDisabled bool, vmi *v1.VirtualMachineInstance) bool {
 	return (vmi.Spec.Domain.Devices.LogSerialConsole != nil && *vmi.Spec.Domain.Devices.LogSerialConsole) || (vmi.Spec.Domain.Devices.LogSerialConsole == nil && !clusterSerialConsoleLogDisabled)
 }
+
+// zhou: README,
 
 func (l *LibvirtDomainManager) SyncVMI(vmi *v1.VirtualMachineInstance, allowEmulation bool, options *cmdv1.VirtualMachineOptions) (*api.DomainSpec, error) {
 	l.domainModifyLock.Lock()
@@ -1377,6 +1398,8 @@ func isHotplugBlockDeviceVolumeFunc(volumeName string) bool {
 	}
 	return false
 }
+
+// zhou: README, handle PVC/...
 
 var isBlockDeviceVolume = isBlockDeviceVolumeFunc
 

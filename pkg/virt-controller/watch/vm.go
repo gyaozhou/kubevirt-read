@@ -123,6 +123,8 @@ const (
 
 const defaultMaxCrashLoopBackoffDelaySeconds = 300
 
+// zhou:
+
 func NewVMController(vmiInformer cache.SharedIndexInformer,
 	vmInformer cache.SharedIndexInformer,
 	dataVolumeInformer cache.SharedIndexInformer,

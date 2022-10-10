@@ -89,6 +89,11 @@ static void *socket_check(int fd, void *arg) {
     }
 }
 
+// zhou: README, generate binary "container-disk", will be packed into image "virt-launcher-xxx".
+//       "/usr/bin/container-disk no-op", do nothing
+//       "/usr/bin/container-disk --copy-path xxx", listen on this unix socket and wait for closed.
+//       I suppose it's used to control lifecycle for ???
+
 int main(int argc, char **argv) {
     char *copy_path_dir;
     char *copy_path_tmp;

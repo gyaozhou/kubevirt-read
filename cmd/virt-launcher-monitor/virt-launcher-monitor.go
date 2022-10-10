@@ -108,6 +108,8 @@ func removeSerialConsoleTermFile(uid string) {
 	}
 }
 
+// zhou: virt-launcher Pod,
+
 func main() {
 
 	containerDiskDir := pflag.String("container-disk-dir", "/var/run/kubevirt/container-disks", "Base directory for container disk data")
@@ -132,6 +134,8 @@ func main() {
 		}
 	}
 
+	// zhou: execute virt-launcher binary
+
 	exitCode, err := RunAndMonitor(*containerDiskDir, *uid)
 	if *keepAfterFailure && (exitCode != 0 || err != nil) {
 		log.Log.Infof("keeping virt-launcher container alive since --keep-after-failure is set to true")
@@ -145,6 +149,8 @@ func main() {
 
 	os.Exit(exitCode)
 }
+
+// zhou: execute virt-launcher binary, the major purpose is clean up qemu when termination.
 
 // RunAndMonitor run virt-launcher process and monitor it to give qemu an extra grace period to properly terminate
 // in case of crashes
